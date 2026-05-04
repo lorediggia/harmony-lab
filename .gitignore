@@ -1,0 +1,4 @@
+/target
+harmony-lab/Cargo.lock
+harmony-lab/target
+*.AppImage
