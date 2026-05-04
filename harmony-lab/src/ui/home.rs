@@ -17,7 +17,11 @@ pub fn show(ctx: &egui::Context, state: &mut AppState, current_palette: &mut [eg
             ui.add_space(ui.available_height() * 0.20);
 
             ui.heading(
+<<<<<<< HEAD
                 egui::RichText::new("Harmony by Ren")
+=======
+                egui::RichText::new("Harmony")
+>>>>>>> 0af260b (feat: add AppImage support)
                     .family(egui::FontFamily::Proportional)
                     .size(72.0)
                     .strong()
