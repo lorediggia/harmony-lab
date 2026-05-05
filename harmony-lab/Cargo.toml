@@ -1,9 +1,5 @@
 [package]
-<<<<<<< HEAD
-name = "piano_88"
-=======
 name = "harmony"
->>>>>>> 0af260b (feat: add AppImage support)
 version = "0.1.0"
 edition = "2021"
 
