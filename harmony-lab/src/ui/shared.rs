@@ -15,68 +15,87 @@ pub fn top_controls_panel(
         .frame(egui::Frame::none().fill(egui::Color32::from_rgb(22, 22, 26)).inner_margin(16.0))
         .show(ctx, |ui| {
             ui.columns(3, |cols| {
+                
                 cols[0].vertical_centered(|ui| {
-                    ui.label(egui::RichText::new("Root").strong().size(14.0).color(egui::Color32::from_gray(160)));
-                    ui.add_space(4.0);
-                    let changed = egui::ComboBox::from_id_source("rt_shared")
-                        .width(120.0)
-                        .selected_text(NOTE_NAMES[*root])
-                        .show_ui(ui, |ui| {
-                            (0..12).any(|i| ui.selectable_value(root, i, NOTE_NAMES[i]).changed())
-                        }).inner.unwrap_or(false);
-                    if changed { *chord_deg = None; }
+                    ui.allocate_ui_with_layout(
+                        egui::vec2(120.0, 0.0),
+                        egui::Layout::top_down(egui::Align::Min),
+                        |ui| {
+                            ui.label(egui::RichText::new("Root").strong().size(14.0).color(egui::Color32::from_gray(160)));
+                            ui.add_space(4.0);
+                            let changed = egui::ComboBox::from_id_source("rt_shared")
+                                .width(120.0)
+                                .selected_text(NOTE_NAMES[*root])
+                                .show_ui(ui, |ui| {
+                                    (0..12).any(|i| ui.selectable_value(root, i, NOTE_NAMES[i]).changed())
+                                }).inner.unwrap_or(false);
+                            if changed { *chord_deg = None; }
+                        },
+                    );
                 });
 
                 cols[1].vertical_centered(|ui| {
-                    ui.label(egui::RichText::new("Scale").strong().size(14.0).color(egui::Color32::from_gray(160)));
-                    ui.add_space(4.0);
-                    let changed = egui::ComboBox::from_id_source("sc_shared")
-                        .width(220.0)
-                        .selected_text(SCALES[*scale_idx].name)
-                        .show_ui(ui, |ui| {
-                            SCALES.iter().enumerate().any(|(i, s)| {
-                                ui.selectable_value(scale_idx, i, s.name).changed()
-                            })
-                        }).inner.unwrap_or(false);
-                    if changed { *chord_deg = None; }
+                    ui.allocate_ui_with_layout(
+                        egui::vec2(220.0, 0.0),
+                        egui::Layout::top_down(egui::Align::Min),
+                        |ui| {
+                            ui.label(egui::RichText::new("Scale").strong().size(14.0).color(egui::Color32::from_gray(160)));
+                            ui.add_space(4.0);
+                            let changed = egui::ComboBox::from_id_source("sc_shared")
+                                .width(220.0)
+                                .selected_text(SCALES[*scale_idx].name)
+                                .show_ui(ui, |ui| {
+                                    SCALES.iter().enumerate().any(|(i, s)| {
+                                        ui.selectable_value(scale_idx, i, s.name).changed()
+                                    })
+                                }).inner.unwrap_or(false);
+                            if changed { *chord_deg = None; }
+                        },
+                    );
                 });
 
                 cols[2].vertical_centered(|ui| {
-                    ui.label(egui::RichText::new("Chord Pattern").strong().size(14.0).color(egui::Color32::from_gray(160)));
-                    ui.add_space(4.0);
-                    egui::ComboBox::from_id_source("pat_shared")
-                        .width(220.0)
-                        .selected_text(chord_pattern.name())
-                        .show_ui(ui, |ui| {
-                            let gray = |s| egui::RichText::new(s).color(egui::Color32::from_gray(120));
-                            let mut opt = |ui: &mut egui::Ui, p: ChordPattern| { 
-                                ui.selectable_value(chord_pattern, p, p.name());
-                            };
+                    ui.allocate_ui_with_layout(
+                        egui::vec2(220.0, 0.0),
+                        egui::Layout::top_down(egui::Align::Min),
+                        |ui| {
+                            ui.label(egui::RichText::new("Chord Pattern").strong().size(14.0).color(egui::Color32::from_gray(160)));
+                            ui.add_space(4.0);
+                            egui::ComboBox::from_id_source("pat_shared")
+                                .width(220.0)
+                                .selected_text(chord_pattern.name())
+                                .show_ui(ui, |ui| {
+                                    let gray = |s| egui::RichText::new(s).color(egui::Color32::from_gray(120));
+                                    let mut opt = |ui: &mut egui::Ui, p: ChordPattern| {
+                                        ui.selectable_value(chord_pattern, p, p.name());
+                                    };
 
-                            ui.label(gray("Built in Thirds"));
-                            opt(ui, ChordPattern::Triad);
-                            opt(ui, ChordPattern::Seventh);
-                            opt(ui, ChordPattern::Ninth);
-                            opt(ui, ChordPattern::Eleventh);
-                            opt(ui, ChordPattern::Thirteenth);
-                            ui.separator();
-                            ui.label(gray("Suspended"));
-                            opt(ui, ChordPattern::Sus2);
-                            opt(ui, ChordPattern::Sus4);
-                            opt(ui, ChordPattern::SevenSus2);
-                            opt(ui, ChordPattern::SevenSus4);
-                            ui.separator();
-                            ui.label(gray("Added"));
-                            opt(ui, ChordPattern::Add9);
-                            opt(ui, ChordPattern::Add11);
-                            opt(ui, ChordPattern::Add13);
-                            ui.separator();
-                            ui.label(gray("Alternative Structures"));
-                            opt(ui, ChordPattern::PowerChord);
-                            opt(ui, ChordPattern::Quartal3);
-                            opt(ui, ChordPattern::Quartal4);
-                            opt(ui, ChordPattern::Cluster);
-                        });
+                                    ui.label(gray("Built in Thirds"));
+                                    opt(ui, ChordPattern::Triad);
+                                    opt(ui, ChordPattern::Seventh);
+                                    opt(ui, ChordPattern::Ninth);
+                                    opt(ui, ChordPattern::Eleventh);
+                                    opt(ui, ChordPattern::Thirteenth);
+                                    ui.separator();
+                                    ui.label(gray("Suspended"));
+                                    opt(ui, ChordPattern::Sus2);
+                                    opt(ui, ChordPattern::Sus4);
+                                    opt(ui, ChordPattern::SevenSus2);
+                                    opt(ui, ChordPattern::SevenSus4);
+                                    ui.separator();
+                                    ui.label(gray("Added"));
+                                    opt(ui, ChordPattern::Add9);
+                                    opt(ui, ChordPattern::Add11);
+                                    opt(ui, ChordPattern::Add13);
+                                    ui.separator();
+                                    ui.label(gray("Alternative Structures"));
+                                    opt(ui, ChordPattern::PowerChord);
+                                    opt(ui, ChordPattern::Quartal3);
+                                    opt(ui, ChordPattern::Quartal4);
+                                    opt(ui, ChordPattern::Cluster);
+                                });
+                        },
+                    );
                 });
             });
         });
